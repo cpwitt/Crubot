@@ -1,8 +1,10 @@
-#pragma config(Motor, port2, leftMotor, tmotorNormal, openLoop, reversed)
-#pragma config(Motor, port3, rightMotor, tmotorNormal, openLoop, reversed)
-#pragma config(Motor, port4, motorA, tmotorNormal, openLoop, reversed)
-#pragma config(Motor,  port6,  tmotorNormal, openLoop)
-#pragma config(Motor, port7, tmotorNormal, openLoop)
+#pragma config(Sensor, dgtl1,  boomMax,        sensorTouch)
+#pragma config(Sensor, dgtl2,  boomMin,        sensorTouch)
+#pragma config(Motor,  port2,           leftMotor,     tmotorServoContinuousRotation, openLoop, reversed)
+#pragma config(Motor,  port3,           rightMotor,    tmotorServoContinuousRotation, openLoop, reversed)
+#pragma config(Motor,  port4,           motorA,        tmotorServoContinuousRotation, openLoop, reversed)
+#pragma config(Motor,  port6,           servoA,    tmotorNormal, openLoop)
+#pragma config(Motor,  port7,           servoB,    tmotorNormal, openLoop)
 
 /* Two methods for controlling speed of the motors. One requires a press to change
  * speed and the \other you hold down continuously (this is the one commented out).
@@ -29,7 +31,7 @@ float changeSpeedHold()
 
 void servoPort6()
 {
-	motor[port6] = currentAngle6;
+	motor[servoA] = currentAngle6;
 		if(vexRT[Btn5D] == 1 && currentAngle6 > -127 + deltaAngle6)
 		{ //runs when 5D is pressed and the angle won't hit the minimum (it resets to 0 when it does)
 			currentAngle6 -= deltaAngle6;
@@ -44,7 +46,7 @@ void servoPort6()
 
 void servoPort7()
 {
-	motor[port7] = currentAngle7;
+	motor[servoB] = currentAngle7;
 		if(vexRT[Btn6D] == 1 && currentAngle7 > -127 + deltaAngle7)
 		{ //runs when 6D is pressed and the angle won't hit the minimum (it resets to 0 when it does)
 			currentAngle7 -= deltaAngle7;
@@ -68,9 +70,17 @@ task main()
 		// creates dead space
 		if (boomControlIn < -63) {
 			boomControlOut = boomControlIn + 63;
+
+			if (SensorValue(boomMin) == 1) { //if limit "Min" switch is hit, motor turns off
+				boomControlOut = 0;
+			}
 	  }
-		else if (boomControlIn > 63) {
+		else if (boomControlIn > 63) { //boom is going up
 			boomControlOut = boomControlIn - 63;
+
+			if (SensorValue(boomMax) == 1) { //if limit switch "Max" is hit, motor turns off
+				boomControlOut = 0;
+			}
 		}
 		else {
 			boomControlOut  = 0;
