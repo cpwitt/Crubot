@@ -2,7 +2,7 @@
 #pragma config(Sensor, dgtl2,  boomMin,        sensorTouch)
 #pragma config(Motor,  port2,           leftMotor,     tmotorServoContinuousRotation, openLoop, reversed)
 #pragma config(Motor,  port3,           rightMotor,    tmotorServoContinuousRotation, openLoop, reversed)
-#pragma config(Motor,  port4,           motorA,        tmotorServoContinuousRotation, openLoop, reversed)
+#pragma config(Motor,  port4,           boomMotor,        tmotorServoContinuousRotation, openLoop, reversed)
 #pragma config(Motor,  port6,           servoA,    tmotorNormal, openLoop)
 #pragma config(Motor,  port7,           servoB,    tmotorNormal, openLoop)
 
@@ -20,7 +20,7 @@ float deltaAngle7 = 1;
 int pause = 4;  // delay between iterations
 //ratio of deltaAngle & delay determines how fast the servo turns (50 degs/s right now)
 
-//changes the speed only when Btn5D is held down
+//increases the speed only when Btn5D is held down
 float changeSpeedHold()
 {
 	if(vexRT[Btn5D] == 1)
@@ -63,7 +63,7 @@ task main()
 {
 	while(true)
 	{
-		int boomControlIn = vexRT[Ch1]; // channel on, right joystick, left-right from -127 to 127
+		int boomControlIn = vexRT[Ch1]; // channel one, right joystick, left-right from -127 to 127
 		int boomControlOut = 0;
 
 		// ignore the joystick until it is at least halfway pushed
@@ -88,7 +88,7 @@ task main()
 
 		motor[leftMotor] = vexRT[Ch3]*k1;
 		motor[rightMotor] = vexRT[Ch2]*k1;
-		motor[motorA] = boomControlOut *k2 * 2; //vexRT[Ch1]*k2; (motor for arm)
+		motor[boomMotor] = boomControlOut *k2 * 2; //vexRT[Ch1]*k2; (motor for arm)
 
 		servoPort6();
 		servoPort7();
