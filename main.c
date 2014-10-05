@@ -63,8 +63,12 @@ task main()
 {
 	while(true)
 	{
-		int boomControlIn = vexRT[Ch1]; // channel one, right joystick, left-right from -127 to 127
+		int boomControlIn = vexRT[Ch1]; //channel one, right joystick, left-right from -127 to 127
 		int boomControlOut = 0;
+		int motorControlInRight = vexRT[Ch2]; //channel two, right joystick, down-up from -127 to 127
+		int motorControlOutRight = 0;
+		int motorControlInLeft = vexRT[Ch3]; //channel three, left joystick, down-up from -127 to 127
+		int motorControlOutLeft = 0;
 
 		// ignore the joystick until it is at least halfway pushed
 		// creates dead space
@@ -85,7 +89,25 @@ task main()
 		else {
 			boomControlOut  = 0;
 		}
+		if (motorControlInRight < -63) {
+			motorControlOutRight = motorControlInRight + 63;
+		}
+		else if (motorControlInRight > 63) {
+			motorControlOutRight = motorControlInRight - 63;
+		}
+		else {
+			motorControlOutRight = 0;
+		}
 
+		if (motorControlInLeft < -63) {
+			motorControlOutLeft = motorControlInLeft + 63;
+		}
+		else if (motorControlInLeft > 63) {
+			motorControlOutLeft = motorControlInLeft - 63;
+		}
+		else {
+			motorControlOutLeft = 0;
+		}
 		motor[leftMotor] = vexRT[Ch3]*k1;
 		motor[rightMotor] = vexRT[Ch2]*k1;
 		motor[boomMotor] = boomControlOut *k2 * 2; //vexRT[Ch1]*k2; (motor for arm)
