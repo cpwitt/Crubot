@@ -69,7 +69,7 @@ void checkSensors()
 	if((SensorValue(boomMin) == 1 && vexRT[Ch3]<0) || (SensorValue(boomMax == 1) && vexRT[Ch3]>0))
 	{ //fixed so it can move in the opposite direction when it hits a sensor
 		k2 = 0;
-	} //if limit "Min" or "Max" switch is hit, motor turns off */	
+	} //if limit "Min" or "Max" switch is hit, motor turns off */
 
 }
 
