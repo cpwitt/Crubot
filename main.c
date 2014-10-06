@@ -1,6 +1,6 @@
 #pragma config(Sensor, dgtl1, boomMax, sensorTouch) //Sensors
 #pragma config(Sensor, dgtl2, boomMin, sensorTouch)
-#pragma config(Motor,  port2, leftMotor, tmotorNomral, openLoop, reversed) //Motors
+#pragma config(Motor,  port2, leftMotor, tmotorNomral, openLoop) //Motors
 #pragma config(Motor,  port3, rightMotor, tmotorNormal, openLoop, reversed)
 #pragma config(Motor,  port4, boomMotor, tmotorNomral, openLoop, reversed)
 #pragma config(Motor,  port6, servoA, tmotorNormal, openLoop) //Servos
@@ -20,6 +20,8 @@ int pause = 4;  // delay between iterations
 
 void kValues()
 {
+	k1 = 1;
+	k2 = 0;
 	if(vexRT[Btn5D] == 1)
 	{ //wheels are slowed down
 		k1 = 0.3;
@@ -29,11 +31,6 @@ void kValues()
 	{ //boom turned on, wheels off
 		k1 = 0;
 		k2 = 1;
-	}
-	else
-	{ //act as normal
-		k1 = 1;
-		k2 = 0;
 	}
 }
 
@@ -72,14 +69,14 @@ task main()
 	while(true)
 	{
 		motor[leftMotor] = vexRT[Ch3]*k1;
-		motor[rightMotor] = vexRT[Ch1]*k1;
-		motor[boomMotor] = vexRT[Ch1]*k2; //vexRT[Ch1]*k2; (motor for arm)
+		motor[rightMotor] = vexRT[Ch2]*k1;
+		motor[boomMotor] = vexRT[Ch3]*k2;
 
 		servoPort6();
 		servoPort7();
 
 		kValues();
-		if(SensorValue(boomMin) == 1 || SensorValue(boomMax == 1))
-			{k2 = 0;} //if limit "Min" or "Max" switch is hit, motor turns off
+		/* if(SensorValue(boomMin) == 1 || SensorValue(boomMax == 1))
+			{k2 = 0;} //if limit "Min" or "Max" switch is hit, motor turns off */
 	}
 }
