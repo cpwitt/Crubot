@@ -77,7 +77,7 @@ task main()
 
 		servoPort6();
 		servoPort7();
-		
+
 		kValues();
 		if(SensorValue(boomMin) == 1 || SensorValue(boomMax == 1))
 			{k2 = 0;} //if limit "Min" or "Max" switch is hit, motor turns off
