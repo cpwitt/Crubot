@@ -104,8 +104,8 @@ task main()
 		else {
 			motorControlOutLeft = 0;
 		}
-		motor[leftMotor] = vexRT[Ch3]*k1;
-		motor[rightMotor] = vexRT[Ch2]*k1;
+		motor[leftMotor] = vexRT[Ch3]*k1*2;
+		motor[rightMotor] = vexRT[Ch2]*k1*2;
 		motor[boomMotor] = boomControlOut *k2 * 2; //vexRT[Ch1]*k2; (motor for arm)
 
 		servoPort6();
