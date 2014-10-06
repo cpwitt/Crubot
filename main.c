@@ -63,9 +63,6 @@ void servoPort7()
 		sleep(pause);
 	}
 }
-
-<<<<<<< HEAD
-void checkSensors()
 {
 	if((SensorValue(boomMin) == 1 && vexRT[Ch3]<0) || (SensorValue(boomMax == 1) && vexRT[Ch3]>0))
 	{ //fixed so it can move in the opposite direction when it hits a sensor
@@ -74,8 +71,6 @@ void checkSensors()
 
 }
 
-=======
->>>>>>> parent of c35fa41... Update main.c
 task main()
 {
 	while(true)
