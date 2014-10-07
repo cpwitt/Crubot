@@ -66,12 +66,17 @@ void servoPort7()
 
 void checkSensors()
 {
+//	if(SensorValue(boomMin) == 1 && vexRT[Ch3]<0)
+//	{ k2=0; }
 	if(SensorValue(boomMin) == 1 && vexRT[Ch3]<0)
-	{ k2=0; }
-	if(SensorValue(boomMax == 1) && vexRT[Ch3]>0)
-	{ k2=0; }
+	{
+		k2 = 0;
+	}
+	if(SensorValue(boomMax) == 1 && vexRT[Ch3]>0)
+	{
+		k2 = 0;
+	}
 }
-
 task main()
 {
 	while(true)
