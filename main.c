@@ -3,16 +3,16 @@
 #pragma config(Motor,  port2, leftMotor, tmotorNomral, openLoop) //Motors
 #pragma config(Motor,  port3, rightMotor, tmotorNormal, openLoop, reversed)
 #pragma config(Motor,  port4, boomMotor, tmotorNomral, openLoop, reversed)
-#pragma config(Motor,  port6, servoA, tmotorNormal, openLoop) //Servos
-#pragma config(Motor,  port7, servoB, tmotorNormal, openLoop)
+#pragma config(Motor,  port6, wristServo, tmotorNormal, openLoop) //Servos
+#pragma config(Motor,  port7, clawServo, tmotorNormal, openLoop)
 
 float k1 = 1; //proportionality constant for relation of joystick and motor speed
 float k2 = 0;
 
-float currentAngle6 = 0;
-float currentAngle7 = 0;
-float deltaAngle6 = 1; //how much the angle changes each iteration
-float deltaAngle7 = 1;
+float currentWristAngle = 0;
+float currentClawAngle = 0;
+float deltaWristAngle = 1; //how much the angle changes each iteration
+float deltaClawAngle = 1;
 int pause = 4;  // delay between iterations
 //ratio of deltaAngle & delay determines how fast the servo turns (50 degs/s right now)
 
@@ -34,32 +34,32 @@ void kValues()
 	}
 }
 
-void servoPort6()
+void wristServoMove()
 {
-	motor[servoA] = currentAngle6;
-	if(vexRT[Btn5D] == 1 && currentAngle6 > -127 + deltaAngle6)
+	motor[wristServo] = currentWristAngle;
+	if(vexRT[Btn8D] == 1 && currentWristAngle > -127 + deltaWristAngle)
 	{ //runs when 5D is pressed and the angle won't hit the minimum (it resets to 0 when it does)
-		currentAngle6 -= deltaAngle6;
+		currentWristAngle -= deltaWristAngle;
 		sleep(pause);
 	}
-	if(vexRT[Btn5U] == 1 && currentAngle6 < 127 - deltaAngle6)
+	if(vexRT[Btn8U] == 1 && currentWristAngle < 127 - deltaWristAngle)
 	{ //runs when 5U is pressed and the angle won't hit the maximum
-		currentAngle6 += deltaAngle6;
+		currentWristAngle += deltaWristAngle;
 		sleep(pause);
 	}
 }
 
-void servoPort7()
+void clawServoMove()
 {
-	motor[servoB] = currentAngle7;
-	if(vexRT[Btn6D] == 1 && currentAngle7 > -127 + deltaAngle7)
+	motor[clawServo] = currentClawAngle;
+	if(vexRT[Btn6D] == 1 && currentClawAngle > -127 + deltaClawAngle)
 	{ //runs when 6D is pressed and the angle won't hit the minimum (it resets to 0 when it does)
-		currentAngle7 -= deltaAngle7;
+		currentClawAngle -= deltaClawAngle;
 		sleep(pause);
 	}
-	if(vexRT[Btn6U] == 1 && currentAngle7 < 127 - deltaAngle7)
+	if(vexRT[Btn6U] == 1 && currentClawAngle < 127 - deltaClawAngle)
 	{ //runs when 6U is pressed and the angle won't hit the maximum
-		currentAngle7 += deltaAngle7;
+		currentClawAngle += deltaClawAngle;
 		sleep(pause);
 	}
 }
@@ -85,8 +85,8 @@ task main()
 		motor[rightMotor] = vexRT[Ch2]*k1;
 		motor[boomMotor] = vexRT[Ch3]*k2;
 
-		servoPort6();
-		servoPort7();
+		wristServoMove();
+		clawServoMove();
 
 		kValues();
 		checkSensors();
