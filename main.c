@@ -1,3 +1,4 @@
+
 #pragma config(Sensor, dgtl1, boomMax, sensorTouch) //Sensors
 #pragma config(Sensor, dgtl2, boomMin, sensorTouch)
 #pragma config(Motor,  port2, leftMotor, tmotorNomral, openLoop) //Motors
@@ -5,6 +6,7 @@
 #pragma config(Motor,  port4, boomMotor, tmotorNomral, openLoop, reversed)
 #pragma config(Motor,  port6, wristServo, tmotorNormal, openLoop) //Servos
 #pragma config(Motor,  port7, clawServo, tmotorNormal, openLoop)
+#pragma config(Motor,  port8, cattleCatcherServo, tmotorNormal, openLoop)
 
 float k1 = 1; //proportionality constant for relation of joystick and motor speed
 float k2 = 0;
@@ -15,6 +17,8 @@ float deltaWristAngle = 1; //how much the angle changes each iteration
 float deltaClawAngle = 1;
 int pause = 4;  // delay between iterations
 //ratio of deltaAngle & delay determines how fast the servo turns (50 degs/s right now)
+
+bool lowered = true;
 
 //increases the speed only when Btn5D is held down
 
@@ -64,6 +68,25 @@ void clawServoMove()
 	}
 }
 
+void cattleCatcher()
+{
+	if(vexRT[Btn7D] == 1)
+	{
+		if(lowered)
+		{
+			motor[cattleCatcherServo] = 127; 
+			lowered = !lowered;
+			while(vexRT[Btn7D] == 1) { }
+		}
+		else
+		{ 
+			motor[cattleCatcherServo] = -100; 
+			lowered = !lowered;
+			while(vexRT[Btn7D] == 1) { }
+		}
+	}
+}
+
 void checkSensors()
 {
 //	if(SensorValue(boomMin) == 1 && vexRT[Ch3]<0)
@@ -79,6 +102,7 @@ void checkSensors()
 }
 task main()
 {
+	motor[cattleCatcherServo] = -100;
 	while(true)
 	{
 		motor[leftMotor] = vexRT[Ch3]*k1;
@@ -87,6 +111,7 @@ task main()
 
 		wristServoMove();
 		clawServoMove();
+		cattleCatcher();
 
 		kValues();
 		checkSensors();
